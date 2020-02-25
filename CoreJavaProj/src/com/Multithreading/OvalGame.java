@@ -4,12 +4,15 @@ import java.awt.Color;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.event.WindowEvent;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.ReentrantLock;
 import java.awt.event.WindowAdapter;
 
 public class OvalGame extends Frame implements Runnable {
 	
 	Thread t1,t2,t3;
 	static int y1 = 400, y2 = 400, y3 = 400;
+	static int counter=0;
 	public OvalGame() {
 		super("Oval game");
 		setBackground(Color.CYAN);
@@ -32,6 +35,7 @@ public class OvalGame extends Frame implements Runnable {
 	}
 	
 	public void run() {
+		boolean flag=false;
 		Thread currentThread=Thread.currentThread();
 		if(currentThread.getName().equals("One")){
 		int count=0;
@@ -50,6 +54,8 @@ public class OvalGame extends Frame implements Runnable {
 			}
 			
 			else if(y1<100) {
+				counter++;
+				check();
 				while(count!=0) {
 				y1=y1+30;
 				this.repaint();
@@ -61,6 +67,8 @@ public class OvalGame extends Frame implements Runnable {
 					e.printStackTrace();
 				}
 				}
+				counter++;
+				check();
 			}		
 		}
 		}
@@ -69,7 +77,7 @@ public class OvalGame extends Frame implements Runnable {
 			int count=0;
 			while(true) {
 				if(y2>=100) {
-					y2=y2-20;
+					y2=y2-30;
 					this.repaint();
 					count++;
 					try {
@@ -82,8 +90,10 @@ public class OvalGame extends Frame implements Runnable {
 				}
 				
 				else if(y2<100) {
+					counter++;
+					check();
 					while(count!=0) {
-					y2=y2+20;
+					y2=y2+30;
 					this.repaint();
 					count--;
 					try {
@@ -93,6 +103,8 @@ public class OvalGame extends Frame implements Runnable {
 						e.printStackTrace();
 					}
 					}
+					counter++;
+					check();
 				}		
 			}
 		}
@@ -101,7 +113,7 @@ public class OvalGame extends Frame implements Runnable {
 			int count=0;
 			while(true) {
 				if(y3>=100) {
-					y3=y3-50;
+					y3=y3-30;
 					this.repaint();
 					count++;
 					try {
@@ -114,8 +126,10 @@ public class OvalGame extends Frame implements Runnable {
 				}
 				
 				else if(y3<100) {
+					counter++;
+					check();
 					while(count!=0) {
-					y3=y3+50;
+					y3=y3+30;
 					this.repaint();
 					count--;
 					try {
@@ -125,9 +139,35 @@ public class OvalGame extends Frame implements Runnable {
 						e.printStackTrace();
 					}
 					}
+					counter++;
+					check();
 				}		
 			}
 		}
+	}
+	ReentrantLock l=new ReentrantLock();
+	Condition c=l.newCondition();
+	public void check() {
+		l.lock();
+		try {
+		if(counter==1 || counter==2) {
+			try {
+				c.await();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		if(counter==3) {
+			counter=0;
+			c.signalAll();
+		}
+		}
+		finally {
+			l.unlock();
+		}
+		
+		
 	}
 		
 	public void paint(Graphics g) {
