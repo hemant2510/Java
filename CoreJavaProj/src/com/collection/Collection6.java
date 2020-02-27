@@ -37,7 +37,7 @@ class User{
 	
 	@Override
 	public boolean equals(Object obj) {
-		if(this.username.equals(((User)obj).username))
+		if(this.username.equals(((User)obj).getUsername()))
 		return true;
 		else
 			return false;
@@ -86,7 +86,7 @@ class ChatRoom{
 	public void setListuser(User u) {
 		listuser.add(u);
 	}
-
+	
 
 	public ArrayList<Message> getListmsg() {
 		return listmsg;
@@ -98,6 +98,16 @@ class ChatRoom{
 	}
 
 	
+
+	public void setListuser(TreeSet<User> listuser) {
+		this.listuser = listuser;
+	}
+
+
+	public void setListmsg(ArrayList<Message> listmsg) {
+		this.listmsg = listmsg;
+	}
+
 
 	public ChatRoom(String name) {
 		this.name = name;
@@ -127,6 +137,14 @@ class ChatRoom{
 	public String toString() {
 		return "ChatRoom [name=" + name + "]";
 	}
+	@Override
+	public boolean equals(Object obj) {
+		if(this.name.equals(((User)obj).getUsername()))
+			return true;
+			else
+				return false;
+	}
+	
 }
 
 
@@ -196,6 +214,13 @@ public class Collection6 {
         return false;
 	}
 	
+	public static void deleteUserFromHashMap() {
+		Iterator<ChatRoom> itr=userHashMap.keySet().iterator();
+		while(itr.hasNext()) {
+			Iterator<User> treeSetIterator=userHashMap.get(itr.next()).iterator();
+		}
+	}
+	
 	public static void main(String[] args) {
 		Scanner sc=new Scanner(System.in);
 		while(true)
@@ -211,6 +236,7 @@ public class Collection6 {
 		System.out.println("G) Logout");
 		System.out.println("H) Delete an user");
 		System.out.println("I) Delete the chat room.");
+		System.out.println("J) Exit the application");
 		System.out.println("Please enter your option:");
 		char n=sc.nextLine().charAt(0);
 		switch(n) {
@@ -327,8 +353,44 @@ public class Collection6 {
 					System.out.println("User logged out successfully.");
 					break;
 					
-		case 'H':	
+		case 'H':	System.out.println("Enter username");
+					String userNameForDeleting=sc.nextLine();
+					User toBeDeleted=checkUserExist(userNameForDeleting);
 					
+					if((toBeDeleted!=null)) {
+						System.out.println("Enter password");
+						String passWord=sc.nextLine();
+						if(toBeDeleted.getPassword().equals(passWord))
+						{	userList.remove(toBeDeleted);
+							Iterator<ChatRoom> itr=userHashMap.keySet().iterator();
+							while(itr.hasNext())
+							{	ChatRoom rooms=itr.next();
+								TreeSet<User> treeSet1=userHashMap.get(rooms);
+								Iterator<User> iterator2=treeSet1.iterator();
+								while(iterator2.hasNext())
+								{	User userTobeDeleted=iterator2.next();
+									if(toBeDeleted.equals(userTobeDeleted))
+									{
+										treeSet1.remove(userTobeDeleted);
+										rooms.setListuser(treeSet1);
+									}
+								}
+							}
+							System.out.println("User Deleted Succesfully");
+						}
+						else
+						{
+							System.out.println("Wrong Password Log In again");
+						}
+					}
+					else
+					{
+						System.out.println("user doesnot exist");
+					}
+					break;
+		case 'J':   System.out.println("Thank you for using my application");
+					System.exit(0);
+					break;
 		default :  	System.out.println("Invalid choice");
 					break;
 				 	
