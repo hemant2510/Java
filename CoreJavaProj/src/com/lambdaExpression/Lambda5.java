@@ -12,7 +12,7 @@ public class Lambda5 {
 		ArrayList<StringBuilder> ar=new ArrayList<StringBuilder>();
 		ar.add(new StringBuilder("Hemant"));
 		ar.add(new StringBuilder("Raj"));
-		Consumer<StringBuilder> consumer=(StringBuilder s1)->s=s.append(s1.charAt(0));
+		Consumer<StringBuilder> consumer=(StringBuilder s1)->s.append(s1.charAt(0));
 		check(ar,consumer);
 		System.out.println(s);
 	}
