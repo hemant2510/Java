@@ -8,14 +8,14 @@ import static java.time.temporal.TemporalAdjusters.*;
 class Date7{
 
 	public static void main(String[] args) {
-		LocalDate currentLocalDate=LocalDate.now();
+		LocalDate currentLocalDate=LocalDate.of(2020, 1, 1);
 		int year=currentLocalDate.getYear();
-		currentLocalDate=LocalDate.parse(year+"-01-01");
 		int count=0;
 		while(year==currentLocalDate.getYear()) {
 		LocalDate nextSunday = currentLocalDate.with(next(DayOfWeek.SUNDAY));
 		currentLocalDate=nextSunday;
 		count++;
+		System.out.println(nextSunday+" "+currentLocalDate);
 		}
 		count=count-1;
 		System.out.println(count);
