@@ -16,7 +16,7 @@ public class Lambda8 {
 				Runnable r=()->{
 					for(int i=0;i<ar.size();i++)
 					{
-						c.accept(ar.get(i));	
+						c.accept(ar.get(i));
 					}
 				};
 		Thread t=new Thread(r);
