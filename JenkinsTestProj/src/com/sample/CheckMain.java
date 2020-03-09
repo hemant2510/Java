@@ -1,4 +1,5 @@
-package jarTest;
+package com.sample;
+
 
 public class CheckMain {
 
